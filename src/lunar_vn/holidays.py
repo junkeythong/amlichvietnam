@@ -26,11 +26,16 @@ LUNAR_HOLIDAYS = {
 }
 
 
-def get_holiday(solar: _dt.date, lunar: LunarDate) -> Optional[str]:
+def get_holiday(solar: _dt.date, lunar: Optional[LunarDate] = None) -> Optional[str]:
     """
-    Get Vietnamese holiday for a given solar and lunar date.
-    Returns the name of the holiday or None.
+    Get Vietnamese holiday for a given solar date.
+    Calculates lunar date automatically if not provided.
     """
+    from .core import solar_to_lunar
+    
+    if lunar is None:
+        lunar = solar_to_lunar(solar)
+
     # Priority: Lunar Tet then Solar then other Lunar
     if not lunar.leap:
         if (lunar.month, lunar.day) == (1, 1):

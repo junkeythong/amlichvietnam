@@ -63,7 +63,7 @@ jdn = jd_from_date(date.day, date.month, date.year)
 print(can_chi.get_day_can_chi(jdn))  # Giáp Thìn
 
 # Check for Holiday
-print(holidays.get_holiday(date, lunar))  # Tết Nguyên Đán
+print(holidays.get_holiday(date))  # Tết Nguyên Đán
 ```
 
 ---
