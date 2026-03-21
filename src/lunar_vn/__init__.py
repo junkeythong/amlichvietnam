@@ -7,6 +7,8 @@ from .core import (
     solar_to_lunar,
     lunar_to_solar,
 )
+from . import can_chi
+from . import holidays
 
 __all__ = [
     "LunarDate",
@@ -16,5 +18,7 @@ __all__ = [
     "convert_lunar_to_solar",
     "solar_to_lunar",
     "lunar_to_solar",
+    "can_chi",
+    "holidays",
 ]
 
