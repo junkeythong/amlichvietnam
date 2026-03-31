@@ -3,3 +3,9 @@ __pycache__/
 .DS_Store
 dist
 .pytest_cache/
+bin/
+lib/
+lib64
+pyvenv.cfg
+src/lunar_vn.egg-info/
+

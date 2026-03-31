@@ -2,6 +2,7 @@
 
 [![PyPI version](https://img.shields.io/pypi/v/lunar-vn.svg)](https://pypi.org/project/lunar-vn/)
 [![CI](https://github.com/junkeythong/amlichvietnam/actions/workflows/ci.yml/badge.svg)](https://github.com/junkeythong/amlichvietnam/actions/workflows/ci.yml)
+[![Downloads](https://img.shields.io/pypi/dm/lunar-vn.svg)](https://pypi.org/project/lunar-vn/)
 
 Python library for converting between **Gregorian (solar) calendar** and **Vietnamese lunar calendar**.
 
@@ -18,7 +19,7 @@ Python library for converting between **Gregorian (solar) calendar** and **Vietn
 - **Convert Lunar → Solar**: Accurate conversion using the Ho Ngoc Duc algorithm.
 - **Leap month support**: Handled automatically.
 - **Timezone support**: Default `UTC+7` (Vietnam).
-- **Processing Time Benchmark**: High-performance conversions.
+- **Processing Time Benchmark**: High-performance conversions.P
 
 ---
 
@@ -86,10 +87,10 @@ See [documentation](docs/comparison_chinese_lunar.md).
 
 ## ATTRIBUTION
 
-The Vietnamese lunar calendar algorithm is described by **Ho Ngoc Duc**  
+The Vietnamese lunar calendar algorithm is described by **Ho Ngoc Duc**
 on the website: https://xemamlich.uhm.vn
 
-This library is a Python re-implementation of the published algorithm.  
+This library is a Python re-implementation of the published algorithm.
 
 ---
 
