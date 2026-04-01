@@ -1,8 +1,8 @@
-# Am Lich Viet Nam
+# Âm Lịch Việt Nam
 
 [![PyPI version](https://img.shields.io/pypi/v/lunar-vn.svg)](https://pypi.org/project/lunar-vn/)
 [![CI](https://github.com/junkeythong/amlichvietnam/actions/workflows/ci.yml/badge.svg)](https://github.com/junkeythong/amlichvietnam/actions/workflows/ci.yml)
-[![Downloads](https://img.shields.io/pypi/dm/lunar-vn.svg)](https://pypi.org/project/lunar-vn/)
+[![PyPI Downloads](https://static.pepy.tech/personalized-badge/lunar-vn?period=total&units=INTERNATIONAL_SYSTEM&left_color=BLACK&right_color=MAGENTA&left_text=downloads)](https://pypi.org/project/lunar-vn/)
 
 Python library for converting between **Gregorian (solar) calendar** and **Vietnamese lunar calendar**.
 
