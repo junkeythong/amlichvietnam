@@ -38,11 +38,11 @@ def get_holiday(solar: _dt.date, lunar: Optional[LunarDate] = None) -> Optional[
 
     # Priority: Lunar Tet then Solar then other Lunar
     if not lunar.leap:
-        if (lunar.month, lunar.day) == (1, 1):
+        if (lunar.day, lunar.month) == (1, 1):
             return LUNAR_HOLIDAYS[(1, 1)]
-        if (lunar.month, lunar.day) == (1, 2):
+        if (lunar.day, lunar.month) == (2, 1):
             return LUNAR_HOLIDAYS[(2, 1)]
-        if (lunar.month, lunar.day) == (1, 3):
+        if (lunar.day, lunar.month) == (3, 1):
             return LUNAR_HOLIDAYS[(3, 1)]
 
     # Solar holidays

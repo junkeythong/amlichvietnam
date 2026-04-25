@@ -4,9 +4,40 @@ from dataclasses import dataclass
 from functools import lru_cache
 import datetime as _dt
 import math
+import warnings
 from typing import Tuple, Union
 
 PI = math.pi
+
+SUPPORTED_YEAR_RANGE = (1900, 2100)
+_MAX_LEAP_SEARCH = 14
+
+def _validate_solar(dd: int, mm: int, yy: int) -> None:
+    try:
+        _dt.date(yy, mm, dd)
+    except ValueError as e:
+        raise ValueError(f"Invalid solar date {dd}/{mm}/{yy}: {e}") from e
+    if yy < SUPPORTED_YEAR_RANGE[0] or yy > SUPPORTED_YEAR_RANGE[1]:
+        raise ValueError(f"Year {yy} out of supported range {SUPPORTED_YEAR_RANGE}")
+
+def _validate_lunar(day: int, month: int, year: int) -> None:
+    if not (1 <= month <= 12):
+        raise ValueError(f"lunar month must be 1-12, got {month}")
+    if not (1 <= day <= 30):
+        raise ValueError(f"lunar day must be 1-30, got {day}")
+    if year < SUPPORTED_YEAR_RANGE[0] or year > SUPPORTED_YEAR_RANGE[1]:
+        raise ValueError(f"Year {year} out of supported range {SUPPORTED_YEAR_RANGE}")
+
+def clear_cache() -> None:
+    """Clear all internal computation caches.
+    
+    Call this in memory-constrained environments after processing large date ranges.
+    Note: subsequent calls will recompute cached values.
+    """
+    get_new_moon_day.cache_clear()
+    get_sun_longitude.cache_clear()
+    get_lunar_month11.cache_clear()
+    get_leap_month_offset.cache_clear()
 
 
 def _int_floor(x: float) -> int:
@@ -151,7 +182,13 @@ def get_leap_month_offset(a11: int, time_zone: float) -> int:
         last = arc
         i += 1
         arc = get_sun_longitude(get_new_moon_day(k + i, time_zone), time_zone)
-        if arc == last or i >= 14:
+        if arc == last:
+            break
+        if i >= _MAX_LEAP_SEARCH:
+            warnings.warn(
+                f"Leap month search hit iteration limit at a11={a11}. Result may be inaccurate.",
+                RuntimeWarning, stacklevel=4,
+            )
             break
 
     return i - 1
@@ -164,12 +201,16 @@ class LunarDate:
     year: int
     leap: bool = False  # True if leap month
 
+    def __post_init__(self):
+        _validate_lunar(self.day, self.month, self.year)
+
 
 def convert_solar_to_lunar(dd: int, mm: int, yy: int, time_zone: float = 7.0) -> LunarDate:
     """
     Convert solar date dd/mm/yy to lunar date using HND algorithm.
     time_zone = local time zone offset from UTC (Vietnam official: 7.0).
     """
+    _validate_solar(dd, mm, yy)
     day_number = jd_from_date(dd, mm, yy)
     k = _int_floor((day_number - 2415021.076998695) / 29.530588853)
 
@@ -221,6 +262,8 @@ def convert_lunar_to_solar(
     lunar_leap: 1 if leap month else 0 (same as HND JS).
     Raises ValueError if leap flag is inconsistent (like JS returns [0,0,0]).
     """
+    _validate_lunar(lunar_day, lunar_month, lunar_year)
+    
     if lunar_month < 11:
         a11 = get_lunar_month11(lunar_year - 1, time_zone)
         b11 = get_lunar_month11(lunar_year, time_zone)
@@ -256,6 +299,10 @@ DateLike = Union[_dt.date, Tuple[int, int, int]]
 
 def solar_to_lunar(date: DateLike, time_zone: float = 7.0) -> LunarDate:
     if isinstance(date, tuple):
+        warnings.warn(
+            "Passing a tuple (dd, mm, yy) to solar_to_lunar is deprecated and may be confusing due to non-standard ordering. Please pass a datetime.date object instead.",
+            DeprecationWarning, stacklevel=2
+        )
         dd, mm, yy = date
         return convert_solar_to_lunar(dd, mm, yy, time_zone=time_zone)
     return convert_solar_to_lunar(date.day, date.month, date.year, time_zone=time_zone)

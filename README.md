@@ -2,7 +2,9 @@
 
 [![PyPI version](https://img.shields.io/pypi/v/lunar-vn.svg)](https://pypi.org/project/lunar-vn/)
 [![CI](https://github.com/junkeythong/amlichvietnam/actions/workflows/ci.yml/badge.svg)](https://github.com/junkeythong/amlichvietnam/actions/workflows/ci.yml)
+[![License](https://img.shields.io/pypi/l/lunar-vn.svg)](https://pypi.org/project/lunar-vn/)
 [![PyPI Downloads](https://static.pepy.tech/personalized-badge/lunar-vn?period=total&units=INTERNATIONAL_SYSTEM&left_color=BLACK&right_color=MAGENTA&left_text=downloads)](https://pypi.org/project/lunar-vn/)
+[![Monthly Downloads](https://static.pepy.tech/personalized-badge/lunar-vn?period=month&units=INTERNATIONAL_SYSTEM&left_color=BLACK&right_color=BLUE&left_text=downloads/month)](https://pypi.org/project/lunar-vn/)
 
 Python library for converting between **Gregorian (solar) calendar** and **Vietnamese lunar calendar**.
 
@@ -12,14 +14,15 @@ Python library for converting between **Gregorian (solar) calendar** and **Vietn
 
 ## FEATURES
 
-- **No Dependencies**: Ready for enterprise usage.
+- **No Dependencies**: Ready for enterprise usage with strict typing support (PEP-561 compliant).
 - **Support Can Chi**: Heavenly Stems and Earthly Branches for year, month, day, hour.
 - **Vietnamese Holidays**: Common solar and lunar holidays included.
-- **Convert Solar → Lunar**: (`dd/mm/yyyy → lunar day/month/year with leap month flag`)
+- **Convert Solar → Lunar**: Accepts robust `datetime.date` inputs.
 - **Convert Lunar → Solar**: Accurate conversion using the Ho Ngoc Duc algorithm.
+- **Supported Range**: High precision conversion from years **1900 to 2100**.
 - **Leap month support**: Handled automatically.
 - **Timezone support**: Default `UTC+7` (Vietnam).
-- **Processing Time Benchmark**: High-performance conversions.P
+- **Processing Time Benchmark**: High-performance conversions utilizing automated caching (`clear_cache` supported).
 
 ---
 
@@ -39,7 +42,8 @@ import datetime as dt
 from lunar_vn import solar_to_lunar, lunar_to_solar, LunarDate
 
 # Solar -> Lunar
-l = solar_to_lunar((17, 2, 2026))   # Vietnamese Lunar New Year 2026
+date = dt.date(2026, 2, 17)
+l = solar_to_lunar(date)   # Vietnamese Lunar New Year 2026
 print(l)  # LunarDate(day=1, month=1, year=2026, leap=False)
 
 # Lunar -> Solar

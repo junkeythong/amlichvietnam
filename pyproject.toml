@@ -3,7 +3,7 @@ requires = ["setuptools>=68", "wheel"]
 build-backend = "setuptools.build_meta"
 
 [project]
-name = "lunar_vn"
+name = "lunar-vn"
 version = "1.1.1"
 description = "Vietnamese lunar calendar conversion (Ho Ngoc Duc algorithm, per calrules) - Enterprise Ready"
 readme = "README.md"
@@ -12,6 +12,25 @@ license = { text = "MIT" }
 requires-python = ">=3.9"
 authors = [{ name = "thongbui" }]
 dependencies = []
+classifiers = [
+    "Development Status :: 5 - Production/Stable",
+    "Intended Audience :: Developers",
+    "License :: OSI Approved :: MIT License",
+    "Operating System :: OS Independent",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.9",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Programming Language :: Python :: 3.13",
+    "Topic :: Software Development :: Libraries :: Python Modules",
+    "Typing :: Typed",
+]
+
+[project.urls]
+Homepage = "https://github.com/junkeythong/amlichvietnam"
+Source = "https://github.com/junkeythong/amlichvietnam"
+"Bug Tracker" = "https://github.com/junkeythong/amlichvietnam/issues"
 
 [tool.setuptools]
 package-dir = {"" = "src"}
@@ -19,6 +38,9 @@ package-dir = {"" = "src"}
 [tool.setuptools.packages.find]
 where = ["src"]
 include = ["lunar_vn*"]
+
+[tool.setuptools.package-data]
+lunar_vn = ["py.typed"]
 
 [tool.pytest.ini_options]
 testpaths = ["tests"]

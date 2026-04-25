@@ -6,9 +6,17 @@ from .core import (
     convert_lunar_to_solar,
     solar_to_lunar,
     lunar_to_solar,
+    clear_cache,
+    SUPPORTED_YEAR_RANGE,
 )
 from . import can_chi
 from . import holidays
+
+from importlib.metadata import version, PackageNotFoundError
+try:
+    __version__ = version("lunar_vn")
+except PackageNotFoundError:
+    __version__ = "unknown"
 
 __all__ = [
     "LunarDate",
@@ -18,6 +26,8 @@ __all__ = [
     "convert_lunar_to_solar",
     "solar_to_lunar",
     "lunar_to_solar",
+    "clear_cache",
+    "SUPPORTED_YEAR_RANGE",
     "can_chi",
     "holidays",
 ]

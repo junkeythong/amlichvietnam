@@ -95,3 +95,37 @@ def test_roundtrip_solar_lunar_solar_small_range():
         assert d2 == d
         d += dt.timedelta(days=step_days)
 
+def test_invalid_solar_inputs():
+    with pytest.raises(ValueError):
+        solar_to_lunar((99, 99, 2024))
+    
+    with pytest.raises(ValueError, match="supported range"):
+        solar_to_lunar((1, 1, 1800))
+        
+    with pytest.raises(ValueError, match="supported range"):
+        solar_to_lunar((1, 1, 2200))
+
+def test_invalid_lunar_date_construction():
+    with pytest.raises(ValueError, match="must be 1-12"):
+        LunarDate(1, 13, 2024)
+        
+    with pytest.raises(ValueError, match="must be 1-30"):
+        LunarDate(31, 1, 2024)
+        
+    with pytest.raises(ValueError, match="supported range"):
+        LunarDate(1, 1, 1700)
+
+def test_time_zone_effects():
+    # Different time zone shifting the date
+    solar_vn = dt.date(2024, 2, 10) # Tet
+    lunar_vn = solar_to_lunar(solar_vn, time_zone=7.0)
+    assert lunar_vn == LunarDate(1, 1, 2024)
+    # Different time zone runs fine
+    lunar_diff = solar_to_lunar(solar_vn, time_zone=8.0)
+    assert lunar_diff.year == 2024
+
+def test_solar_to_lunar_handles_both_types():
+    with pytest.warns(DeprecationWarning, match="deprecated"):
+        res1 = solar_to_lunar((10, 2, 2024))
+    res2 = solar_to_lunar(dt.date(2024, 2, 10))
+    assert res1 == res2
