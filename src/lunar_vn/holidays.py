@@ -8,9 +8,16 @@ if TYPE_CHECKING:
 
 SOLAR_HOLIDAYS = {
     (1, 1): "Tết Dương Lịch",
+    (14, 2): "Ngày Lễ Tình Nhân",
+    (8, 3): "Ngày Quốc Tế Phụ Nữ",
     (30, 4): "Ngày Giải Phóng Miền Nam",
     (1, 5): "Ngày Quốc Tế Lao Động",
+    (1, 6): "Ngày Quốc Tế Thiếu Nhi",
     (2, 9): "Ngày Quốc Khánh",
+    (20, 10): "Ngày Phụ Nữ Việt Nam",
+    (20, 11): "Ngày Nhà Giáo Việt Nam",
+    (22, 12): "Ngày Thành Lập Quân Đội Nhân Dân Việt Nam",
+    (25, 12): "Lễ Giáng Sinh",
 }
 
 LUNAR_HOLIDAYS = {
@@ -18,11 +25,15 @@ LUNAR_HOLIDAYS = {
     (2, 1): "Tết Nguyên Đán",
     (3, 1): "Tết Nguyên Đán",
     (15, 1): "Rằm Tháng Giêng",
+    (3, 3): "Tết Hàn Thực",
     (10, 3): "Giỗ Tổ Hùng Vương",
     (15, 4): "Lễ Phật Đản",
     (5, 5): "Tết Đoan Ngọ",
+    (7, 7): "Lễ Thất Tịch",
     (15, 7): "Lễ Vu Lan",
     (15, 8): "Tết Trung Thu",
+    (15, 10): "Tết Hạ Nguyên",
+    (23, 12): "Tết Ông Công Ông Táo",
 }
 
 

@@ -100,19 +100,30 @@ print(holidays.get_holiday(date))  # Tết Nguyên Đán
 Solar holidays include:
 
 - Tết Dương Lịch
+- Ngày Lễ Tình Nhân (Valentine)
+- Ngày Quốc Tế Phụ Nữ
 - Ngày Giải Phóng Miền Nam
 - Ngày Quốc Tế Lao Động
+- Ngày Quốc Tế Thiếu Nhi
 - Ngày Quốc Khánh
+- Ngày Phụ Nữ Việt Nam
+- Ngày Nhà Giáo Việt Nam
+- Ngày Thành Lập Quân Đội Nhân Dân Việt Nam
+- Lễ Giáng Sinh
 
 Lunar holidays include:
 
 - Tết Nguyên Đán
 - Rằm Tháng Giêng
+- Tết Hàn Thực
 - Giỗ Tổ Hùng Vương
 - Lễ Phật Đản
 - Tết Đoan Ngọ
+- Lễ Thất Tịch
 - Lễ Vu Lan
 - Tết Trung Thu
+- Tết Hạ Nguyên
+- Tết Ông Công Ông Táo
 
 ---
 
