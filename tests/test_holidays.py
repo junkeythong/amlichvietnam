@@ -44,6 +44,20 @@ def test_all_lunar_holidays():
     leap_lunar = LunarDate(15, 8, 2024, leap=True)
     assert holidays.get_holiday(dummy, lunar=leap_lunar) is None
 
+def test_lunar_reminders():
+    dummy = dt.date(2024, 1, 2)
+
+    assert holidays.get_holiday(dummy, lunar=LunarDate(1, 2, 2024)) == "Mùng 1"
+    assert holidays.get_holiday(dummy, lunar=LunarDate(15, 2, 2024)) == "Rằm"
+
+    # Specific holidays still win over generic reminders
+    assert holidays.get_holiday(dummy, lunar=LunarDate(1, 1, 2024)) == "Tết Nguyên Đán"
+    assert holidays.get_holiday(dummy, lunar=LunarDate(15, 1, 2024)) == "Rằm Tháng Giêng"
+
+    # Leap month should not create reminders
+    assert holidays.get_holiday(dummy, lunar=LunarDate(1, 2, 2024, leap=True)) is None
+    assert holidays.get_holiday(dummy, lunar=LunarDate(15, 2, 2024, leap=True)) is None
+
 def test_solar_holidays_full():
     mapping = {
         dt.date(2024, 1, 1): "Tết Dương Lịch",

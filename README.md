@@ -125,6 +125,13 @@ Lunar holidays include:
 - Tết Hạ Nguyên
 - Tết Ông Công Ông Táo
 
+Generic lunar reminders are also returned for non-leap months:
+
+- Mùng 1
+- Rằm
+
+Specific lunar holidays still take precedence over these reminders.
+
 ---
 
 ## Benchmark

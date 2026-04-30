@@ -36,6 +36,11 @@ LUNAR_HOLIDAYS = {
     (23, 12): "Tết Ông Công Ông Táo",
 }
 
+LUNAR_REMINDERS = {
+    1: "Mùng 1",
+    15: "Rằm",
+}
+
 
 def get_holiday(solar: _dt.date, lunar: Optional[LunarDate] = None) -> Optional[str]:
     """
@@ -47,7 +52,7 @@ def get_holiday(solar: _dt.date, lunar: Optional[LunarDate] = None) -> Optional[
     if lunar is None:
         lunar = solar_to_lunar(solar)
 
-    # Priority: Lunar Tet then Solar then other Lunar
+    # Priority: specific lunar holidays, then solar holidays, then reminders
     if not lunar.leap:
         if (lunar.day, lunar.month) == (1, 1):
             return LUNAR_HOLIDAYS[(1, 1)]
@@ -66,5 +71,8 @@ def get_holiday(solar: _dt.date, lunar: Optional[LunarDate] = None) -> Optional[
         l_key = (lunar.day, lunar.month)
         if l_key in LUNAR_HOLIDAYS:
             return LUNAR_HOLIDAYS[l_key]
+
+        if lunar.day in LUNAR_REMINDERS:
+            return LUNAR_REMINDERS[lunar.day]
 
     return None
