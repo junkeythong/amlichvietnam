@@ -1,8 +1,8 @@
 from __future__ import annotations
+import datetime as _dt
 from typing import Optional, TYPE_CHECKING
 
 if TYPE_CHECKING:
-    import datetime as _dt
     from .core import LunarDate
 
 
@@ -76,3 +76,35 @@ def get_holiday(solar: _dt.date, lunar: Optional[LunarDate] = None) -> Optional[
             return LUNAR_REMINDERS[lunar.day]
 
     return None
+
+
+def list_holidays(year: int) -> list[tuple[_dt.date, str]]:
+    """
+    Return specific Vietnamese holidays observed in a Gregorian year.
+
+    Generic lunar reminders such as Mùng 1 and Rằm are intentionally excluded.
+    """
+    from .core import SUPPORTED_YEAR_RANGE, solar_to_lunar
+
+    if year < SUPPORTED_YEAR_RANGE[0] or year > SUPPORTED_YEAR_RANGE[1]:
+        raise ValueError(f"Year {year} out of supported range {SUPPORTED_YEAR_RANGE}")
+
+    start = _dt.date(year, 1, 1)
+    end = _dt.date(year, 12, 31)
+    items: list[tuple[_dt.date, str]] = []
+
+    current = start
+    while current <= end:
+        s_key = (current.day, current.month)
+        if s_key in SOLAR_HOLIDAYS:
+            items.append((current, SOLAR_HOLIDAYS[s_key]))
+
+        lunar = solar_to_lunar(current)
+        if not lunar.leap:
+            l_key = (lunar.day, lunar.month)
+            if l_key in LUNAR_HOLIDAYS:
+                items.append((current, LUNAR_HOLIDAYS[l_key]))
+
+        current += _dt.timedelta(days=1)
+
+    return sorted(items, key=lambda item: item[0])

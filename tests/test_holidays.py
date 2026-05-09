@@ -1,5 +1,5 @@
 import datetime as dt
-from lunar_vn import holidays, solar_to_lunar, LunarDate
+from lunar_vn import holidays, list_holidays, solar_to_lunar, LunarDate
 
 def test_holidays():
     # Tet 2024
@@ -74,3 +74,14 @@ def test_solar_holidays_full():
     }
     for s_date, name in mapping.items():
         assert holidays.get_holiday(s_date) == name
+
+def test_list_holidays_returns_year_specific_solar_dates():
+    items = list_holidays(2024)
+
+    assert (dt.date(2024, 1, 1), "Tết Dương Lịch") in items
+    assert (dt.date(2024, 2, 10), "Tết Nguyên Đán") in items
+    assert (dt.date(2024, 4, 18), "Giỗ Tổ Hùng Vương") in items
+    assert all(solar.year == 2024 for solar, _name in items)
+    assert items == sorted(items, key=lambda item: item[0])
+
+    assert holidays.list_holidays(2024) == items

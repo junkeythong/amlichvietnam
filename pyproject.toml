@@ -5,7 +5,7 @@ build-backend = "setuptools.build_meta"
 [project]
 name = "lunar-vn"
 version = "1.2.1"
-description = "Vietnamese lunar calendar conversion (Ho Ngoc Duc algorithm, per calrules) - Enterprise Ready"
+description = "Typed, dependency-free Vietnamese lunar calendar conversion for personal and business systems"
 readme = "README.md"
 keywords = ["calendar", "vietnam", "lunar", "am-lich", "enterprise", "no-dependencies"]
 license = { text = "MIT" }
@@ -44,4 +44,3 @@ lunar_vn = ["py.typed"]
 
 [tool.pytest.ini_options]
 testpaths = ["tests"]
-

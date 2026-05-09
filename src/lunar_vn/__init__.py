@@ -9,6 +9,7 @@ from .core import (
     clear_cache,
     SUPPORTED_YEAR_RANGE,
 )
+from .holidays import list_holidays
 from . import can_chi
 from . import holidays
 
@@ -28,7 +29,7 @@ __all__ = [
     "lunar_to_solar",
     "clear_cache",
     "SUPPORTED_YEAR_RANGE",
+    "list_holidays",
     "can_chi",
     "holidays",
 ]
-

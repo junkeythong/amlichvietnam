@@ -10,6 +10,7 @@ from typing import Tuple, Union
 PI = math.pi
 
 SUPPORTED_YEAR_RANGE = (1900, 2100)
+_SUPPORTED_LUNAR_YEAR_RANGE = (SUPPORTED_YEAR_RANGE[0] - 1, SUPPORTED_YEAR_RANGE[1])
 _MAX_LEAP_SEARCH = 14
 
 def _validate_solar(dd: int, mm: int, yy: int) -> None:
@@ -25,8 +26,12 @@ def _validate_lunar(day: int, month: int, year: int) -> None:
         raise ValueError(f"lunar month must be 1-12, got {month}")
     if not (1 <= day <= 30):
         raise ValueError(f"lunar day must be 1-30, got {day}")
-    if year < SUPPORTED_YEAR_RANGE[0] or year > SUPPORTED_YEAR_RANGE[1]:
-        raise ValueError(f"Year {year} out of supported range {SUPPORTED_YEAR_RANGE}")
+    if year < _SUPPORTED_LUNAR_YEAR_RANGE[0] or year > _SUPPORTED_LUNAR_YEAR_RANGE[1]:
+        raise ValueError(f"Year {year} out of supported range {_SUPPORTED_LUNAR_YEAR_RANGE}")
+
+def _validate_solar_result(date: _dt.date) -> None:
+    if date.year < SUPPORTED_YEAR_RANGE[0] or date.year > SUPPORTED_YEAR_RANGE[1]:
+        raise ValueError(f"Solar result year {date.year} out of supported range {SUPPORTED_YEAR_RANGE}")
 
 def clear_cache() -> None:
     """Clear all internal computation caches.
@@ -214,9 +219,14 @@ def convert_solar_to_lunar(dd: int, mm: int, yy: int, time_zone: float = 7.0) ->
     day_number = jd_from_date(dd, mm, yy)
     k = _int_floor((day_number - 2415021.076998695) / 29.530588853)
 
-    month_start = get_new_moon_day(k + 1, time_zone)
-    if month_start > day_number:
-        month_start = get_new_moon_day(k, time_zone)
+    moon_index = k + 1
+    month_start = get_new_moon_day(moon_index, time_zone)
+    while month_start > day_number:
+        moon_index -= 1
+        month_start = get_new_moon_day(moon_index, time_zone)
+    while get_new_moon_day(moon_index + 1, time_zone) <= day_number:
+        moon_index += 1
+        month_start = get_new_moon_day(moon_index, time_zone)
 
     a11 = get_lunar_month11(yy, time_zone)
     b11 = a11
@@ -290,7 +300,9 @@ def convert_lunar_to_solar(
     k = _int_floor(0.5 + (a11 - 2415021.076998695) / 29.530588853)
     month_start = get_new_moon_day(k + off, time_zone)
     dd, mm, yy = jd_to_date(month_start + lunar_day - 1)
-    return _dt.date(yy, mm, dd)
+    result = _dt.date(yy, mm, dd)
+    _validate_solar_result(result)
+    return result
 
 
 # Convenience API
@@ -316,4 +328,3 @@ def lunar_to_solar(lunar: LunarDate, time_zone: float = 7.0) -> _dt.date:
         lunar_leap=1 if lunar.leap else 0,
         time_zone=time_zone,
     )
-

@@ -6,7 +6,7 @@
 [![PyPI Downloads](https://static.pepy.tech/personalized-badge/lunar-vn?period=total&units=INTERNATIONAL_SYSTEM&left_color=BLACK&right_color=MAGENTA&left_text=downloads)](https://pypi.org/project/lunar-vn/)
 [![Monthly Downloads](https://static.pepy.tech/personalized-badge/lunar-vn?period=month&units=INTERNATIONAL_SYSTEM&left_color=BLACK&right_color=BLUE&left_text=downloads/month)](https://pypi.org/project/lunar-vn/)
 
-**Goal:** lightweight - simple – accurate – easy to reuse - **Enterprise Ready**
+**Goal:** lightweight - typed - dependency-free - accurate - easy to trust
 
 `lunar-vn` is designed for:
 
@@ -16,20 +16,24 @@
 - Bots that need Vietnamese lunar dates
 - Cultural, astrology, and Can Chi applications
 - Backend services that need a small, typed, no-dependency package
+- Personal and business systems that need predictable calendar behavior
 
 ---
 
 ## Features
 
-- **No Dependencies**: Ready for enterprise usage with strict typing support (PEP-561 compliant).
+- **No Dependencies**: Small package with strict typing support (PEP-561 compliant).
+- **Production-friendly**: Deterministic local functions with no runtime service dependency.
 - **Support Can Chi**: Heavenly Stems and Earthly Branches for year, month, day, hour.
 - **Vietnamese Holidays**: Common solar and lunar holidays included.
+- **Holiday Lists**: Get year-specific Vietnamese holiday dates for app and reminder workflows.
 - **Convert Solar → Lunar**: Accepts robust `datetime.date` inputs.
 - **Convert Lunar → Solar**: Accurate conversion using the Ho Ngoc Duc algorithm.
-- **Supported Range**: High precision conversion from years **1900 to 2100**.
+- **Supported Range**: Solar dates from **1900-01-01 to 2100-12-31**.
 - **Leap month support**: Handled automatically.
 - **Timezone support**: Default `UTC+7` (Vietnam).
-- **Processing Time Benchmark**: High-performance conversions utilizing automated caching (`clear_cache` supported).
+- **Full-range tested**: The test suite roundtrips every supported solar date.
+- **Processing Time Benchmark**: High-performance conversions using internal caching (`clear_cache` supported).
 
 ---
 
@@ -73,7 +77,7 @@ print(f"Leap month: {lunar.leap}")
 
 ### Can Chi and Holidays
 ```python
-from lunar_vn import solar_to_lunar, can_chi, holidays
+from lunar_vn import solar_to_lunar, can_chi, holidays, list_holidays
 import datetime as dt
 
 date = dt.date(2024, 2, 10)
@@ -89,6 +93,10 @@ print(can_chi.get_day_can_chi(jdn))  # Giáp Thìn
 
 # Check for Holiday
 print(holidays.get_holiday(date))  # Tết Nguyên Đán
+
+# List holidays observed in a Gregorian year
+for solar_date, name in list_holidays(2026):
+    print(solar_date, name)
 ```
 
 ---
@@ -138,9 +146,24 @@ Specific lunar holidays still take precedence over these reminders.
 
 To run the benchmark script:
 ```bash
-python scripts/benchmark.py
+PYTHONPATH=src python3 scripts/benchmark.py
 ```
 *Expected: > 100,000 conversions per second.*
+
+When installed as a package, `python scripts/benchmark.py` also works.
+
+---
+
+## Accuracy and Scope
+
+`lunar-vn` focuses on the core Vietnamese lunar calendar use case: conversion,
+Can Chi naming, and common holiday lookup. It intentionally avoids broader
+Vạn Sự, astrology, and auspicious-day features so the API stays small and easy
+to verify.
+
+The supported solar date range is **1900-01-01 through 2100-12-31**. The test
+suite includes an exhaustive solar → lunar → solar roundtrip across that full
+range.
 
 ---
 

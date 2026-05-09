@@ -3,6 +3,7 @@ import pytest
 
 from lunar_vn import (
     LunarDate,
+    convert_solar_to_lunar,
     jd_from_date,
     jd_to_date,
     solar_to_lunar,
@@ -41,9 +42,9 @@ def test_jdn_roundtrip_known_dates():
     "solar, expected_lunar",
     [
         # Vietnamese New Year (Tet) dates
-        ((10, 2, 2024), LunarDate(1, 1, 2024, False)),
-        ((29, 1, 2025), LunarDate(1, 1, 2025, False)),
-        ((17, 2, 2026), LunarDate(1, 1, 2026, False)),
+        (dt.date(2024, 2, 10), LunarDate(1, 1, 2024, False)),
+        (dt.date(2025, 1, 29), LunarDate(1, 1, 2025, False)),
+        (dt.date(2026, 2, 17), LunarDate(1, 1, 2026, False)),
     ],
 )
 def test_tet_solar_to_lunar(solar, expected_lunar):
@@ -67,7 +68,7 @@ def test_tet_lunar_to_solar(lunar, expected_solar):
 def test_leap_month_2004_start_day():
     # From HND calrules: leap month in 2004 is the month from 21/3/2004 to 18/4/2004,
     # so 21/3/2004 should be 1/2 leap (month 2 leap) in lunar year 2004.
-    got = solar_to_lunar((21, 3, 2004), time_zone=TZ_VN)
+    got = solar_to_lunar(dt.date(2004, 3, 21), time_zone=TZ_VN)
     assert got == LunarDate(1, 2, 2004, True)
 
     # Reverse should map back
@@ -95,15 +96,40 @@ def test_roundtrip_solar_lunar_solar_small_range():
         assert d2 == d
         d += dt.timedelta(days=step_days)
 
+def test_solar_to_lunar_handles_supported_range_lower_boundary():
+    start = dt.date(1900, 1, 1)
+    end = dt.date(1900, 1, 31)
+
+    d = start
+    while d <= end:
+        lunar = solar_to_lunar(d, time_zone=TZ_VN)
+        assert lunar_to_solar(lunar, time_zone=TZ_VN) == d
+        d += dt.timedelta(days=1)
+
+def test_solar_to_lunar_handles_2054_new_moon_boundary():
+    assert solar_to_lunar(dt.date(2054, 5, 6), time_zone=TZ_VN) == LunarDate(29, 3, 2054)
+    assert solar_to_lunar(dt.date(2054, 5, 7), time_zone=TZ_VN) == LunarDate(30, 3, 2054)
+    assert solar_to_lunar(dt.date(2054, 5, 8), time_zone=TZ_VN) == LunarDate(1, 4, 2054)
+
+def test_roundtrip_solar_lunar_solar_supported_range_exhaustive():
+    start = dt.date(1900, 1, 1)
+    end = dt.date(2100, 12, 31)
+
+    d = start
+    while d <= end:
+        lunar = solar_to_lunar(d, time_zone=TZ_VN)
+        assert lunar_to_solar(lunar, time_zone=TZ_VN) == d
+        d += dt.timedelta(days=1)
+
 def test_invalid_solar_inputs():
     with pytest.raises(ValueError):
-        solar_to_lunar((99, 99, 2024))
+        convert_solar_to_lunar(99, 99, 2024)
     
     with pytest.raises(ValueError, match="supported range"):
-        solar_to_lunar((1, 1, 1800))
+        solar_to_lunar(dt.date(1800, 1, 1))
         
     with pytest.raises(ValueError, match="supported range"):
-        solar_to_lunar((1, 1, 2200))
+        solar_to_lunar(dt.date(2200, 1, 1))
 
 def test_invalid_lunar_date_construction():
     with pytest.raises(ValueError, match="must be 1-12"):
